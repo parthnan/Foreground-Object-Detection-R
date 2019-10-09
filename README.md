@@ -1,5 +1,8 @@
 # Simple Foreground Object Detection in R
-Simple and instructive script made in R implementing the Median Image method for Foreground Object Detection. Good practice for learning of any of R, MATLAB or Octave.
+Median Image method for Foreground Object Detection for videos in R. Subtracts the median values for each pixel from the requred frame of pixel data, in order to get the objects that show up in the current frame, but disappear or move in the most of the other frames.
+
+# Disadvantages
+The objects with similar or same brightness as the background(and color in the case of RGB data) are invisible to this method and dont show up as bright in the detection images(3rd ones from the left)
 
 ![alt text](https://raw.githubusercontent.com/parthnan/Foreground-Object-Detection-R/master/objectdetect.png)
 
