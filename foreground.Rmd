@@ -1,0 +1,54 @@
+---
+title: "Foreground Object Detection using Median Image method(its simple!)"
+author: "Parth Shirish Nandedkar"
+output:
+  html_document
+---
+
+```{r setup, include=TRUE}
+library(EBImage)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+File apdata.rds has the data taken from a security camera. It consists of 200 frames of 176*144 pixel images, each frame being a 25344 value-long row.
+Using simple data handling and manipulation techniques in R, calculate the median values of brightness for each pixel, compare it with the 10th and 130th frames, and highlight out the foreground objects.
+
+```{r, eval = TRUE}
+apdata <- readRDS("apdata.rds")
+  #read apdata.rds into 3d vector variable apdata．
+  #readRDS("<directory name>/lobdata.rds")
+
+med.vec <- apply(apdata,2,median)  # applies function to the '2nd' dimension(i.e. the columns in R), meining medians are taken with respect to all frames for each pixel seperately
+#calculates the median value of each row(median of each pixel in time dimension) and saves it in 1d vector med.vec．
+
+#Next, we subtract the Median vector from the original pixel values and store the absolute values in Emat vector
+Emat <- abs( apdata-matrix(med.vec,200,25344,byrow=TRUE) )
+
+
+
+#Reshaping the 25344 median vector into a more workable 176,144
+med.mat <- matrix(med.vec, 176,144)
+
+
+#Visualizing the result of the analysis for the 10th frame
+
+fnum <- 10
+tmp.org <- matrix(apdata[fnum,], 176,144)#reshape Original frame data
+tmp.med <- matrix(med.mat, 176,144)#reshape Median data
+tmp.err <- matrix(Emat[fnum,], 176,144)#reshape data of the absolute differences
+par(mfrow = c(1,3))
+display(tmp.org)#Original frame image
+display(tmp.med)#Median image 
+display(tmp.err)#image of the absolute differences
+
+
+#Visualizing the result of the analysis for the 130th frame
+
+fnum <- 130
+tmp.org <- matrix(apdata[fnum,], 176,144)#reshape Original frame data
+tmp.med <- matrix(med.mat, 176,144)#reshape Median data
+tmp.err <- matrix(Emat[fnum,], 176,144)#reshape data of the absolute differences
+display(tmp.org)#Original frame image
+display(tmp.med)#Median image 
+display(tmp.err)#image of the absolute differences
+```
